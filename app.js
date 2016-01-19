@@ -2,6 +2,12 @@ var express = require( 'express' );
 var app = express(); // creates an instance of an express application
 var chalk = require('chalk');
 var morgan = require('morgan');
+var swig  = require('swig');
+app.engine('html', swig.renderFile);
+app.set('view engine', 'html');
+app.set('views', './views');
+swig.setDefaults({ cache: false });
+
 
 app.listen(3000, function () {
   console.log('Ready');
@@ -24,7 +30,23 @@ app.use('/special',function(req,res){
 })
 
 app.get('/',function(req,res){
-	res.send('Welcome');
+	//res.send('Welcome');
+	var locals = {
+    title: 'Hall of Fame',
+    people: [{
+        name: 'Full',
+    }, {
+        name: 'Stacker'
+    }, {
+        name: 'Son'
+    }]
+	};
+
+	res.render('index', locals);
+	// swig.renderFile('./views/index.html', locals, function (err, output) {
+	//     res.send(output);
+	//   //  console.log(output);
+	// });
 });
 
 app.get('/news',function(req,res){
