@@ -5,6 +5,7 @@ var morgan = require('morgan');
 var swig  = require('swig');
 var tweetBank = require('./tweetBank.js');
 var routes = require('./routes/');
+var bodyParser = require('body-parser');
 
 
 app.engine('html', swig.renderFile);
@@ -16,6 +17,9 @@ swig.setDefaults({ cache: false });
 app.listen(3000, function () {
   console.log('Ready');
 });
+
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
 
 app.use(morgan('tiny'));
 app.use(express.static('public'));

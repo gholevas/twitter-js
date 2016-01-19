@@ -45,6 +45,19 @@ code {
   padding: 7px;
 }
 
+h3 {
+  font-size: 15px;
+
+}
+
+.twt-div {
+  float: right;
+}
+
+li {
+  list-style-type: none;
+}
+
 .tweetbox img {
   float: left;
   height: 48px;
