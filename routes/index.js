@@ -12,12 +12,11 @@ module.exports = function(io){
 
 	router.get('/users/:name', function(req, res) {
 	  var name = req.params.name;
-	  var namesarr = name.split(" ");
 	  console.log(name);
 	  var list = tweetBank.find( {name: name} );
 	  // console.log(list.indexOf("Jordan"));
 	  console.log(list[0].name);
-	  res.render( 'index', { title: 'Twitter.js - Posts by '+ namesarr.join(" "), tweets: list, myName: namesarr, showForm:true } );
+	  res.render( 'index', { title: 'Twitter.js - Posts by '+ name, tweets: list, myName:name, showForm:true } );
 	});
 
 	router.post('/tweets', function(req, res) {
