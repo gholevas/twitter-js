@@ -94,15 +94,17 @@
       var newDiv = document.createElement("div");
       var newHead = document.createElement("h3");
       var newImg = document.createElement("img");
-      // var newLink = document.createElement("A")
-      // newLink.href = "/users/" + tweet[0];
-      newHead.innerHTML = .innerHTML = tweet[0];
-      listItem.innerHTML = tweet[1];
+      var newLink = document.createElement("a")
+      newLink.href = "/users/" + tweet[0];
       newLink.innerHTML = tweet[0];
+      newHead.innerHTML = tweet[0];
+      listItem.innerHTML = tweet[1];
+
+      //append to Div
       newDiv.appendChild(newImg);
       newDiv.appendChild(newHead);
       newDiv.appendChild(listItem);
-      // newDiv.appendChild(newLink);
+      newDiv.appendChild(newLink);
       var element = document.getElementById("tweetlist");
       element.appendChild(newDiv);
       // some logic to add the new tweet to the DOM…
