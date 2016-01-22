@@ -19,6 +19,18 @@ module.exports = function(io){
 	  res.render( 'index', { title: 'Twitter.js - Posts by '+ name, tweets: list, myName:name, showForm:true } );
 	});
 
+	  // single-tweet page
+	  router.get('/tweets/:id', function(req, res, next) {
+	      var tweetsWithThatId = tweetBank.find({
+	          id: Number(req.params.id)
+	      });
+	      res.render('index', {
+	          title: 'Twitter.js',
+	          tweets: tweetsWithThatId // an array of only one element ;-)
+	      });
+	  });
+
+  
 	router.post('/tweets', function(req, res) {
 	  var name = req.body.name;
 	  var text = req.body.text;

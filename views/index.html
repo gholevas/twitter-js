@@ -28,15 +28,16 @@
     </div>
     <div class="col-md-9">
     
-      <!-- display tweets here -->
-      <div class="tweetbox" id="tweetlist">
+     <!-- display tweets here -->
+      <div id="tweets">
       {% for tweet in tweets %}
-      <img></img>
-          <div>
-            <h3>{{tweet.name}}</h3>
-            <li>{{tweet.text}}</li>
-            <li><a href="/users/{{tweet.name}}">{{tweet.name}}</a></li>
+        <div class="tweetbox">
+          <img>
+          <div class="content">
+            <p class="by"><a href="/users/{{tweet.name}}">{{tweet.name}}</a></p>
+            <p><a href="/tweets/{{tweet.id}}">{{tweet.text}}</a></p>
           </div>
+        </div>
       {% endfor %}
     </div>
       
