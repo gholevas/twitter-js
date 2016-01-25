@@ -10,7 +10,7 @@ module.exports = function(io){
 	  // var tweets = tweetBank.list();
 	  var tweetObject = newTweetBank.User.findAll({ include: [ newTweetBank.Tweet ] })
 		.then(function (user) {
-			 // console.log(JSON.stringify(user))
+			 console.log(JSON.stringify(user))
 		    var tweets = [];
 		     for (var i = 0; i < user.length; i++) {
 			 	tweets.push(user[i].dataValues);
@@ -28,10 +28,29 @@ module.exports = function(io){
 	router.get('/users/:name', function(req, res) {
 	  var name = req.params.name;
 	  console.log(name);
-	  var list = tweetBank.find( {name: name} );
-	  // console.log(list.indexOf("Jordan"));
-	  console.log(list[0].name);
-	  res.render( 'index', { title: 'Twitter.js - Posts by '+ name, tweets: list, myName:name, showForm:true } );
+
+	  var tweetObject = newTweetBank.User.findAll({ 
+	  										where: {name:name },
+	  										include:[newTweetBank.Tweet] 
+	  										})
+		.then(function (user) {
+			 console.log(JSON.stringify(user))
+		    var tweets = [];
+		     for (var i = 0; i < user.length; i++) {
+			 	tweets.push(user[i].dataValues);
+			 };
+			console.log(tweets[0].Tweets[0].dataValues.tweet);
+			return tweets;
+		})
+		.then(function (tweets) {
+			// JSON.stringify(tweets);
+	 		res.render( 'index', { title: 'Twitter.js - Posts by '+ name, tweets: tweets } );
+		});
+
+
+	  // var list = tweetBank.find( {name: name} );
+	  // console.log(list[0].name);
+	  // res.render( 'index', { title: 'Twitter.js - Posts by '+ name, tweets: list, myName:name, showForm:true } );
 	});
 
 	  // single-tweet page
