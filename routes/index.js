@@ -7,19 +7,21 @@ var newTweetBank = require('../models/index.js');
 // module.exports = router;
 module.exports = function(io){
 	router.get('/', function (req, res) {
-	  // var tweets = tweetBank.list();
-	  var tweetObject = newTweetBank.User.findAll({ include: [ newTweetBank.Tweet ] })
-		.then(function (user) {
-			 console.log(JSON.stringify(user))
+	  newTweetBank.Tweet.findAll({ include: [ newTweetBank.User ] })
+		.then(function (tweet) {
+			//console.log(tweet);
+			// console.log(JSON.stringify(user))
 		    var tweets = [];
-		     for (var i = 0; i < user.length; i++) {
-			 	tweets.push(user[i].dataValues);
+		     for (var i = 0; i < tweet.length; i++) {
+			 	tweets.push(tweet[i].dataValues);
 			 };
-			console.log(tweets[0].Tweets[0].dataValues.tweet);
+		//	console.log(tweets[0].Tweets[0].dataValues.tweet);
+		//console.log(tweets)
 			return tweets;
 		})
 		.then(function (tweets) {
 			// JSON.stringify(tweets);
+			//console.log(tweets[0].dataValues);
 	 		res.render( 'index', { title: "George Holevas", tweets: tweets } );
 		});
 
@@ -27,48 +29,74 @@ module.exports = function(io){
 
 	router.get('/users/:name', function(req, res) {
 	  var name = req.params.name;
-	  console.log(name);
+								// where: {name:name },
 
-	  var tweetObject = newTweetBank.User.findAll({ 
-	  										where: {name:name },
-	  										include:[newTweetBank.Tweet] 
-	  										})
-		.then(function (user) {
-			 console.log(JSON.stringify(user))
+	  newTweetBank.Tweet.findAll({ include: [{
+							        model: newTweetBank.User,
+							        where: { name: name }
+    }]
+	  							})
+		.then(function (tweet) {
+			//console.log(tweet);
+			// console.log(JSON.stringify(user))
 		    var tweets = [];
-		     for (var i = 0; i < user.length; i++) {
-			 	tweets.push(user[i].dataValues);
+		     for (var i = 0; i < tweet.length; i++) {
+			 	tweets.push(tweet[i].dataValues);
 			 };
-			console.log(tweets[0].Tweets[0].dataValues.tweet);
+		//	console.log(tweets[0].Tweets[0].dataValues.tweet);
+		//console.log(tweets)
 			return tweets;
 		})
 		.then(function (tweets) {
-			// JSON.stringify(tweets);
-	 		res.render( 'index', { title: 'Twitter.js - Posts by '+ name, tweets: tweets } );
+			 JSON.stringify(tweets);
+	 		res.render( 'index', { title: 'Twitter.js - Posts by '+ name, tweets: tweets , myName:name, showForm:true } );
 		});
-
-
-	  // var list = tweetBank.find( {name: name} );
-	  // console.log(list[0].name);
-	  // res.render( 'index', { title: 'Twitter.js - Posts by '+ name, tweets: list, myName:name, showForm:true } );
 	});
 
 	  // single-tweet page
 	  router.get('/tweets/:id', function(req, res, next) {
-	      var tweetsWithThatId = tweetBank.find({
-	          id: Number(req.params.id)
-	      });
-	      res.render('index', {
-	          title: 'Twitter.js',
-	          tweets: tweetsWithThatId // an array of only one element ;-)
-	      });
+		var id = req.params.id;
+	  	 newTweetBank.Tweet.findAll({ 
+							        where: { id: id },
+	  	 							include: [{
+							        model: newTweetBank.User
+								    }]
+	  							})
+		.then(function (tweet) {
+			//console.log(tweet);
+			// console.log(JSON.stringify(user))
+		    var tweets = [];
+		     for (var i = 0; i < tweet.length; i++) {
+			 	tweets.push(tweet[i].dataValues);
+			 };
+		//	console.log(tweets[0].Tweets[0].dataValues.tweet);
+		//console.log(tweets)
+			return tweets;
+		})
+		.then(function (tweets) {
+			// JSON.stringify(tweets);
+	 		res.render( 'index', { title: 'Twitter.js', tweets: tweets} );
+		});
+
 	  });
 
   
 	router.post('/tweets', function(req, res) {
 	  var name = req.body.name;
 	  var text = req.body.text;
-	  tweetBank.add(name, text);
+
+	  newTweetBank.User.findOne({ where: {name: name} })
+	  .then(function(user) {
+	  	newTweetBank.Tweet.create({ UserId: user.dataValues.id, tweet: text })
+		})
+
+
+	  //send DB userid tweet
+	 //.then(function(task) {
+  // you can now access the newly created task via the variable task
+
+
+	//  tweetBank.add(name, text);
 	  res.redirect('/');
 	  io.sockets.emit('new_tweet', [name, text]);
 	});

@@ -32,10 +32,10 @@
       <div id="tweets">
       {% for tweet in tweets %}
         <div class="tweetbox">
-          <img src="{{tweet.pictureUrl}}">
+          <img src="{{tweet.User.dataValues.pictureUrl}}">
           <div class="content">
-            <p class="by"><a href="/users/{{tweet.id}}">{{tweet.name}}</a></p>
-            <p><a href="/tweets/{{tweet.id}}">{{tweet.Tweets[0].dataValues.tweet}}</a></p>
+            <p class="by"><a href="/users/{{tweet.User.dataValues.name}}">{{tweet.User.dataValues.name}}</a></p>
+            <p><a href="/tweets/{{tweet.id}}">{{tweet.tweet}}</a></p>
           </div>
         </div>
       {% endfor %}
