@@ -10,7 +10,7 @@ module.exports = function(io){
 	  // var tweets = tweetBank.list();
 	  var tweetObject = newTweetBank.User.findAll({ include: [ newTweetBank.Tweet ] })
 		.then(function (user) {
-			// console.log(JSON.stringify(user))
+			 // console.log(JSON.stringify(user))
 		    var tweets = [];
 		     for (var i = 0; i < user.length; i++) {
 			 	tweets.push(user[i].dataValues);
